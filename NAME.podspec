@@ -19,7 +19,7 @@ TODO: Add long description of the pod here.
   s.license = { :type => "MIT", :file => "LICENSE" }
   s.author = { "${USER_NAME}" => "${USER_EMAIL}" }
   s.source = {
-    :git => "ssh://${USER_NAME}@gerrit.huami.com:29418/apps/ios/libs/BNCSQLite",
+    :git => "ssh://gerrit.huami.com:29418/apps/ios/libs/${POD_NAME}",
     :tag => s.version.to_s,
   }
 
