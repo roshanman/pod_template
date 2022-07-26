@@ -1,11 +1,36 @@
 use_frameworks!
 
-platform :ios, '10.0'
+inhibit_all_warnings!
 
-target '${POD_NAME}_Example' do
-  pod '${POD_NAME}', :path => '../'
+install! "cocoapods",
+         :preserve_pod_file_structure => true,
+         :generate_multiple_pod_projects => true,
+         :share_schemes_for_development_pods => true
 
-  target '${POD_NAME}_Tests' do
+source "ssh://gerrit.huami.com:29418/apps/Specs-iOS"
+
+platform :ios, "11.0"
+
+target "${POD_NAME}_Example" do
+  pod "${POD_NAME}", :path => "../"
+
+
+  binary "HMTranslate", "3.0.16"
+
+  # D
+  pod "Diplomatist", "3.1.1", :subspecs => ["Core", "Wechat", "MI", "Share", "Apple"]
+  pod "DokodemoDoor", "1.0.7"
+
+  # F
+  pod "FPSMonitor", "0.0.5", :configurations => ["Debug"]
+
+  # H
+  pod "HMAccountSDK", "5.2.1"
+  pod "HMAccountServices", "3.5.3"
+  pod "HMUIComponentsSDK", "3.3.4"
+  binary "HMLog", "1.5.2"
+
+  target "${POD_NAME}_Tests" do
     inherit! :search_paths
 
     ${INCLUDED_PODS}
