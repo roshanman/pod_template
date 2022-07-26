@@ -11,9 +11,25 @@ source "ssh://gerrit.huami.com:29418/apps/Specs-iOS"
 
 platform :ios, "11.0"
 
+def libs(name)
+  return "ssh://gerrit.huami.com:29418/apps/ios/libs/#{name}"
+end
+
+def flutterLibs(name)
+  return "ssh://gerrit.huami.com:29418/apps/flutter/libs/#{name}"
+end
+
+def binary(name, version, args = {})
+  if args[:force] != true && ENV["APP_STORE"]
+    pod name, version, args
+  else
+    args[:podspec] = "https://internal-artifactory.zepp.top/release/#{version}/binary/#{name}.podspec.json"
+    pod name, args
+  end
+end
+
 target "${POD_NAME}_Example" do
   pod "${POD_NAME}", :path => "../"
-
 
   binary "HMTranslate", "3.0.16"
 
