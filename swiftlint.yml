@@ -1,0 +1,136 @@
+included:
+  - Example/
+  - ${POD_NAME}
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Carthage
+  - Example/Pods
+
+line_length:
+  warning: 120
+  ignores_function_declarations: true
+  ignores_comments: true
+
+disabled_rules: # 执行时排除掉的规则
+  - trailing_whitespace # 每一个空行不能有空格，会与Xcode换行后自动对齐生成的空格冲突，建议排除掉
+  - cyclomatic_complexity
+  - file_length
+  - type_name
+  - inclusive_language
+  - function_parameter_count
+  - identifier_name
+  - type_body_length
+  - function_body_length
+  - nesting
+  - unneeded_break_in_switch
+
+force_cast: warning
+
+identifier_name:
+  excluded:
+    - i
+    - j
+    - idx
+    - h
+    - w
+    - x
+    - y
+    - id
+    - url
+    - min
+    - max
+    - r
+    - g
+    - b
+    - a
+    - vc
+    - vm
+
+custom_rules:
+  rainbowkit_color: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bUIColor[\\.\\(][^sp]" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的颜色，例如：UIColor.s1  " # violation message. optional.
+    severity: warning # violation severity. optional.
+  rainbowkit_font: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bUIFont[\\.\\(](?!(number|title|body))" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的字体，例如：UIFont.body1 " # violation message. optional.
+    severity: warning # violation severity. optional.
+  rainbowkit_button: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bUIButton\\b" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的RBButton" # violation message. optional.
+    severity: warning # violation severity. optional.
+  rainbowkit_alertView: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "(\\bUIAlertController\\b)|(\\bUIActionSheet\\b)|(\\bUIAlertView\\b)" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的RBAlertView" # violation message. optional.
+    severity: warning # violation severity. optional.
+  rainbowkit_pickerView: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bUIPickerView\\b" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的RBPicker" # violation message. optional.
+    severity: warning # violation severity. optional.
+  rainbowkit_datePicker: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bUIDatePicker\\b" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的RBDatePicker" # violation message. optional.
+    severity: warning # violation severity. optional.
+  rainbowkit_hud: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bHMHUD\\b" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的RBHUD" # violation message. optional.
+    severity: error # violation severity. optional.
+  rainbowkit_toast: # rule identifier
+    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
+    excluded: ".*Test\\.swift" # regex that defines paths to exclude during linting. optional
+    name: "不符合UI规范" # rule name. optional.
+    regex: "\\bHMToast\\b" # matching pattern
+    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
+    match_kinds: # SyntaxKinds to match. optional.
+      - comment
+      - identifier
+    message: "建议使用RainbowKit中的RBToast" # violation message. optional.
+    severity: error # violation severity. optional.

@@ -1,0 +1,73 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+function podfile_must_be_sorted_before_commit() {
+    if test ! -z "$(git diff --name-only --cached --diff-filter=M | grep "^Podfile")"; then
+        pods=$(cat Podfile | grep "^\\s\+\(pod\|binary\) " | grep -v "WatchPaiLib" | awk '{print $2}' | sed 's/,//g' | sed 's/\"//g' | sed "s|'||g" > /tmp/podfile1)
+ sorted_pods=$(cat Podfile | grep "^\\s\+\(pod\|binary\) " | grep -v "WatchPaiLib" | awk '{print $2}' | sed 's/,//g' | sed 's/\"//g' | sed "s|'||g" | sort -f > /tmp/podfile2)
+        diff /tmp/podfile1 /tmp/podfile2
+        if [[ $? -ne 0 ]];then
+            echo -e "\033[31m提交Podfile文件时请确保pod已经按名称顺序进行了排序(修改排序后记得重新run pod install)\033[0m"
+            exit 1
+        fi
+    fi
+}
+
+function forbid_commit_if_no_install_swift_format() {
+    if test ! -z "$(git diff --name-only --cached --diff-filter=MA | grep "^[^Pods].*swift")"; then
+        if ! which swiftformat >/dev/null; then
+            echo -e "\033[31m提交swift代码前请先安装swiftformat: brew install swiftformat\033[0m"
+            exit 1
+        fi
+    fi
+}
+
+function call_swiftformat() {
+    # 如果当前提交类型是merge不进行格式化操作以免改动过多影响CR
+    if [[ -n $(git status | grep -o "All conflicts fixed but you are still merging") ]]; then
+        return
+    fi
+
+    # 部分同学的终端是中文
+    if [[ -n $(git status | grep -o "所有冲突已解决") ]]; then
+        return
+    fi
+
+    if which swiftformat >/dev/null; then
+        # 格式化时忽略掉Pods文件夹下的文件改动
+        if test ! -z "$(git diff --name-only --cached --diff-filter=MA | grep "^[^Pods].*swift")"; then
+            swiftformat $(git diff --name-only --cached --diff-filter=MA | grep "^[^Pods].*swift") --swiftversion 5.0 --disable initCoderUnavailable,trailingCommas
+            for file in $(git diff --name-only --cached --diff-filter=MA | grep "^[^Pods].*swift"); do
+                git add "$file"
+            done
+        fi
+    fi
+}
+
+function call_xcodeproj_sort() {
+    # 排序化时忽略掉Pods文件夹下的文件改动
+    modifiedProjectFiles=($(git diff --name-only --cached | grep "^[^Pods].*project.pbxproj"))
+
+    if [[ -z $modifiedProjectFiles ]]; then
+        return 0
+    fi
+
+    echo "sorting project files"
+
+    ######## Sort changed project files and re-add to git
+    for filePath in ${modifiedProjectFiles[@]}; do
+        if [[ -f $filePath ]]; then
+            xcodeproj sort $(echo $filePath | sed s/project.pbxproj//g)
+            git add $filePath
+        fi
+    done
+
+    echo "done sorting project files"
+}
+
+podfile_must_be_sorted_before_commit
+forbid_commit_if_no_install_swift_format
+call_xcodeproj_sort
+call_swiftformat
+

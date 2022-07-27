@@ -23,8 +23,6 @@ TODO: Add long description of the pod here.
     :tag => s.version.to_s,
   }
 
-  s.ios.deployment_target = "10.0"
-
   # 如果需要支持ZeppLife需要将deployment_target设置成iOS10
   s.ios.deployment_target = "11.0"
   s.swift_version = "5.0"
